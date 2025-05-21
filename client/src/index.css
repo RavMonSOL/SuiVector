@@ -1,0 +1,187 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 240 10% 3.9%;
+  --foreground: 0 0% 98%;
+  
+  /* Card colors */
+  --card: 240 10% 10%;
+  --card-foreground: 0 0% 98%;
+  
+  /* Popover colors */
+  --popover: 240 10% 3.9%;
+  --popover-foreground: 0 0% 98%;
+  
+  /* Primary colors - purple */
+  --primary: 272 83% 57%;
+  --primary-foreground: 211 100% 99%;
+  
+  /* Secondary colors - blue */
+  --secondary: 217 100% 61%;
+  --secondary-foreground: 211 100% 99%;
+  
+  /* Accent colors - pink */
+  --accent: 326 100% 60%;
+  --accent-foreground: 211 100% 99%;
+  
+  /* Muted colors */
+  --muted: 240 3.7% 15.9%;
+  --muted-foreground: 240 5% 64.9%;
+  
+  /* Border colors */
+  --border: 240 3.7% 15.9%;
+  --input: 240 3.7% 15.9%;
+  
+  /* Destructive colors */
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 0 0% 98%;
+  
+  /* Success colors */
+  --success: 158 92% 48%;
+  --success-foreground: 0 0% 98%;
+  
+  /* Warning colors */
+  --warning: 45 100% 52%;
+  --warning-foreground: 0 0% 98%;
+  
+  /* Chart colors */
+  --chart-1: 272 83% 57%; /* primary */
+  --chart-2: 217 100% 61%; /* secondary */
+  --chart-3: 326 100% 60%; /* accent */
+  --chart-4: 158 92% 48%; /* success */
+  --chart-5: 45 100% 52%; /* warning */
+  
+  /* Sidebar specific colors */
+  --sidebar-background: 240 10% 3.9%;
+  --sidebar-foreground: 0 0% 98%;
+  --sidebar-primary: 272 83% 57%;
+  --sidebar-primary-foreground: 211 100% 99%;
+  --sidebar-accent: 326 100% 60%;
+  --sidebar-accent-foreground: 211 100% 99%;
+  --sidebar-border: 240 3.7% 15.9%;
+  --sidebar-ring: 272 83% 57%;
+  
+  /* Ring */
+  --ring: 272 83% 57%;
+  
+  /* Border radius */
+  --radius: 0.5rem;
+}
+
+.light {
+  --background: 0 0% 100%;
+  --foreground: 20 14.3% 4.1%;
+  
+  /* Card colors */
+  --card: 0 0% 100%;
+  --card-foreground: 20 14.3% 4.1%;
+  
+  /* Popover colors */
+  --popover: 0 0% 100%;
+  --popover-foreground: 20 14.3% 4.1%;
+  
+  /* Primary colors - purple */
+  --primary: 272 83% 57%;
+  --primary-foreground: 211 100% 99%;
+  
+  /* Secondary colors - blue */
+  --secondary: 217 100% 61%;
+  --secondary-foreground: 211 100% 99%;
+  
+  /* Accent colors - pink */
+  --accent: 326 100% 60%;
+  --accent-foreground: 211 100% 99%;
+  
+  /* Muted colors */
+  --muted: 60 4.8% 95.9%;
+  --muted-foreground: 25 5.3% 44.7%;
+  
+  /* Border colors */
+  --border: 20 5.9% 90%;
+  --input: 20 5.9% 90%;
+  
+  /* Destructive colors */
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 0 0% 98%;
+  
+  /* Success colors */
+  --success: 158 92% 48%;
+  --success-foreground: 20 14.3% 4.1%;
+  
+  /* Warning colors */
+  --warning: 45 100% 52%;
+  --warning-foreground: 20 14.3% 4.1%;
+  
+  /* Chart colors */
+  --chart-1: 272 83% 57%; /* primary */
+  --chart-2: 217 100% 61%; /* secondary */
+  --chart-3: 326 100% 60%; /* accent */
+  --chart-4: 158 92% 48%; /* success */
+  --chart-5: 45 100% 52%; /* warning */
+  
+  /* Sidebar specific colors */
+  --sidebar-background: 0 0% 100%;
+  --sidebar-foreground: 20 14.3% 4.1%;
+  --sidebar-primary: 272 83% 57%;
+  --sidebar-primary-foreground: 211 100% 99%;
+  --sidebar-accent: 326 100% 60%;
+  --sidebar-accent-foreground: 211 100% 99%;
+  --sidebar-border: 20 5.9% 90%;
+  --sidebar-ring: 272 83% 57%;
+  
+  /* Ring */
+  --ring: 272 83% 57%;
+  
+  /* Border radius */
+  --radius: 0.5rem;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+}
+
+@layer components {
+  .neon-border {
+    @apply border border-primary/80 shadow-[0_0_8px_theme(colors.primary.DEFAULT)];
+  }
+  
+  .neon-btn {
+    @apply transition-all duration-300 ease-in-out;
+  }
+  
+  .neon-btn:hover {
+    @apply shadow-[0_0_15px_theme(colors.accent.DEFAULT)] -translate-y-0.5;
+  }
+  
+  .card-hover {
+    @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(157,78,221,0.5)];
+  }
+  
+  .sidebar-item {
+    @apply flex items-center gap-3 px-4 py-3 hover:bg-muted transition-colors;
+  }
+  
+  .sidebar-item.active {
+    @apply bg-gradient-to-r from-primary/20 to-transparent border-l-2 border-primary;
+  }
+  
+  .glow-effect {
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+  
+  @keyframes glow {
+    from {
+      box-shadow: 0 0 5px theme('colors.primary.DEFAULT'), 0 0 10px theme('colors.primary.DEFAULT');
+    }
+    to {
+      box-shadow: 0 0 10px theme('colors.accent.DEFAULT'), 0 0 20px theme('colors.accent.DEFAULT');
+    }
+  }
+}
