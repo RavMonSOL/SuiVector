@@ -8,11 +8,12 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, Copy, CheckCircle2, ArrowRightLeft, Send, Wallet } from 'lucide-react';
-import { useWallet, ConnectButton } from '@suiet/wallet-kit';
+import { ConnectButton, useWalletKit, useSuiClient } from '@mysten/dapp-kit';
 
 export default function WalletPage() {
   const { toast } = useToast();
-  const wallet = useWallet();
+  const { currentWallet } = useCurrentWallet();
+  const suiClient = useSuiClient();
   
   const [recipient, setRecipient] = useState('');
   const [amount, setAmount] = useState('');
@@ -20,9 +21,9 @@ export default function WalletPage() {
   const [copied, setCopied] = useState(false);
   const [balance, setBalance] = useState<string>('0');
   
-  // Get connected status and address from Sui wallet
-  const connected = wallet.connected;
-  const address = wallet.account?.address;
+  // Get connected status and address from modern Sui wallets (Slush/Phantom)
+  const connected = !!currentWallet;
+  const address = currentWallet?.accounts[0]?.address;
   
   // Fetch balance when wallet is connected
   useEffect(() => {

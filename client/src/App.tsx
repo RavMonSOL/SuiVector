@@ -4,9 +4,9 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/components/ui/theme-provider";
+import { SuiClientProvider, WalletProvider } from '@mysten/dapp-kit';
+import { getFullnodeUrl, SuiClientOptions } from '@mysten/sui.js/client';
 import { SuiProvider } from "@/lib/suiContext";
-import { WalletProvider } from '@suiet/wallet-kit';
-import '@suiet/wallet-kit/style.css';
 
 import HomePage from "@/pages/home";
 import ProfilePage from "@/pages/profile";
@@ -57,17 +57,26 @@ function Router() {
 }
 
 function App() {
+  // Configure the network (devnet is used for testing purposes)
+  const networks = {
+    devnet: { url: getFullnodeUrl('devnet') },
+  };
+
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider defaultTheme="dark">
-        <WalletProvider>
-          <SuiProvider>
-            <TooltipProvider>
-              <Toaster />
-              <Router />
-            </TooltipProvider>
-          </SuiProvider>
-        </WalletProvider>
+        {/* New SuiClientProvider from dapp-kit */}
+        <SuiClientProvider networks={networks} defaultNetwork="devnet">
+          {/* New WalletProvider from dapp-kit that supports Slush and Phantom */}
+          <WalletProvider autoConnect={false}>
+            <SuiProvider>
+              <TooltipProvider>
+                <Toaster />
+                <Router />
+              </TooltipProvider>
+            </SuiProvider>
+          </WalletProvider>
+        </SuiClientProvider>
       </ThemeProvider>
     </QueryClientProvider>
   );
