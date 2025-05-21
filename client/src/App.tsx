@@ -4,6 +4,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/components/ui/theme-provider";
+import { SuiProvider } from "@/lib/suiContext";
 
 import HomePage from "@/pages/home";
 import ProfilePage from "@/pages/profile";
@@ -11,6 +12,7 @@ import MarketplacePage from "@/pages/marketplace";
 import CreatePage from "@/pages/create";
 import ExplorePage from "@/pages/explore";
 import GroupsPage from "@/pages/groups";
+import WalletPage from "@/pages/wallet";
 import NotFound from "@/pages/not-found";
 import Sidebar from "@/components/layout/Sidebar";
 import MobileNav from "@/components/layout/MobileNav";
@@ -43,6 +45,7 @@ function Router() {
           <Route path="/create" component={CreatePage} />
           <Route path="/explore" component={ExplorePage} />
           <Route path="/groups" component={GroupsPage} />
+          <Route path="/wallet" component={WalletPage} />
           <Route component={NotFound} />
         </Switch>
         <MobileNav />
@@ -55,10 +58,12 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider defaultTheme="dark">
-        <TooltipProvider>
-          <Toaster />
-          <Router />
-        </TooltipProvider>
+        <SuiProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Router />
+          </TooltipProvider>
+        </SuiProvider>
       </ThemeProvider>
     </QueryClientProvider>
   );
