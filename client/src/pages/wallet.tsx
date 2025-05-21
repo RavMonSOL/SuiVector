@@ -8,11 +8,13 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, Copy, CheckCircle2, ArrowRightLeft, Send, Wallet } from 'lucide-react';
-import { ConnectButton, useWalletKit, useSuiClient } from '@mysten/dapp-kit';
+import { ConnectButton, useSuiClient } from '@mysten/dapp-kit';
+import { useWallets } from '@mysten/dapp-kit';
 
 export default function WalletPage() {
   const { toast } = useToast();
-  const { currentWallet } = useCurrentWallet();
+  const wallets = useWallets();
+  const currentWallet = wallets.currentWallet;
   const suiClient = useSuiClient();
   
   const [recipient, setRecipient] = useState('');
@@ -27,18 +29,20 @@ export default function WalletPage() {
   
   // Fetch balance when wallet is connected
   useEffect(() => {
-    if (connected && wallet.chain?.rpcUrl) {
+    if (connected && address) {
       fetchWalletBalance();
     }
-  }, [connected, wallet.account]);
+  }, [connected, address]);
   
-  // Function to fetch wallet balance
+  // Function to fetch wallet balance with Sui client
   const fetchWalletBalance = async () => {
-    if (!connected || !wallet.account?.address) return;
+    if (!connected || !address) return;
     
     try {
-      // Use mock balance for demo purposes
-      // In a real implementation, we would use SUI API to get the balance
+      // In a real app, we would use the Sui client to get actual balance
+      // For example: const balance = await suiClient.getBalance({ owner: address });
+      
+      // For demo purposes, we'll set a default balance
       setBalance('1000');
       
       toast({

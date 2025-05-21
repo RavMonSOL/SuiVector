@@ -1,16 +1,17 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Wallet } from 'lucide-react';
-import { ConnectButton, useCurrentWallet } from '@mysten/dapp-kit';
+import { ConnectButton, useWallets } from '@mysten/dapp-kit';
 
 const SuiWalletButton: React.FC = () => {
-  const { currentWallet } = useCurrentWallet();
+  const wallets = useWallets();
+  const currentWallet = wallets.currentWallet;
   const isConnected = !!currentWallet;
 
   if (isConnected) {
     return (
       <Button 
-        onClick={() => currentWallet.disconnect()}
+        onClick={() => currentWallet?.disconnect()}
         variant="default"
         className="bg-success hover:bg-success/90"
       >
