@@ -33,6 +33,7 @@ const SuiContext = createContext<SuiContextType>({
   sendSui: async () => null,
   refreshBalance: async () => {},
   error: null,
+  keypair: null,
 });
 
 // Custom hook to use the Sui context
@@ -202,6 +203,7 @@ export const SuiProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     sendSui,
     refreshBalance,
     error,
+    keypair,
   };
 
   return (
