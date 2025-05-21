@@ -5,6 +5,8 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { SuiProvider } from "@/lib/suiContext";
+import { WalletProvider } from '@suiet/wallet-kit';
+import '@suiet/wallet-kit/style.css';
 
 import HomePage from "@/pages/home";
 import ProfilePage from "@/pages/profile";
@@ -58,12 +60,14 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider defaultTheme="dark">
-        <SuiProvider>
-          <TooltipProvider>
-            <Toaster />
-            <Router />
-          </TooltipProvider>
-        </SuiProvider>
+        <WalletProvider>
+          <SuiProvider>
+            <TooltipProvider>
+              <Toaster />
+              <Router />
+            </TooltipProvider>
+          </SuiProvider>
+        </WalletProvider>
       </ThemeProvider>
     </QueryClientProvider>
   );
