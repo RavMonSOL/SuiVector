@@ -8,14 +8,12 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, Copy, CheckCircle2, ArrowRightLeft, Send, Wallet } from 'lucide-react';
-import { ConnectButton, useSuiClient } from '@mysten/dapp-kit';
-import { useWallets } from '@mysten/dapp-kit';
+import { ConnectButton, useSuiClient, useCurrentAccount } from '@mysten/dapp-kit';
 
 export default function WalletPage() {
   const { toast } = useToast();
-  const wallets = useWallets();
-  const currentWallet = wallets.currentWallet;
   const suiClient = useSuiClient();
+  const currentAccount = useCurrentAccount();
   
   const [recipient, setRecipient] = useState('');
   const [amount, setAmount] = useState('');
@@ -24,8 +22,8 @@ export default function WalletPage() {
   const [balance, setBalance] = useState<string>('0');
   
   // Get connected status and address from modern Sui wallets (Slush/Phantom)
-  const connected = !!currentWallet;
-  const address = currentWallet?.accounts[0]?.address;
+  const connected = !!currentAccount;
+  const address = currentAccount?.address;
   
   // Fetch balance when wallet is connected
   useEffect(() => {
@@ -39,11 +37,17 @@ export default function WalletPage() {
     if (!connected || !address) return;
     
     try {
-      // In a real app, we would use the Sui client to get actual balance
-      // For example: const balance = await suiClient.getBalance({ owner: address });
+      // Get actual balance from Sui client
+      const balanceResponse = await suiClient.getBalance({
+        owner: address
+      });
       
-      // For demo purposes, we'll set a default balance
-      setBalance('1000');
+      // Format the balance (divide by 10^9 for SUI decimals)
+      const formattedBalance = balanceResponse?.totalBalance 
+        ? (parseInt(balanceResponse.totalBalance) / 1_000_000_000).toFixed(4)
+        : '0';
+      
+      setBalance(formattedBalance);
       
       toast({
         title: "Balance Updated",

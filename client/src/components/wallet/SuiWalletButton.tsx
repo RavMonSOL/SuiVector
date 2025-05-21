@@ -1,26 +1,11 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Wallet } from 'lucide-react';
-import { ConnectButton, useWallets } from '@mysten/dapp-kit';
+import { ConnectButton } from '@mysten/dapp-kit';
 
 const SuiWalletButton: React.FC = () => {
-  const wallets = useWallets();
-  const currentWallet = wallets.currentWallet;
-  const isConnected = !!currentWallet;
-
-  if (isConnected) {
-    return (
-      <Button 
-        onClick={() => currentWallet?.disconnect()}
-        variant="default"
-        className="bg-success hover:bg-success/90"
-      >
-        <Wallet className="mr-2 h-4 w-4" />
-        Disconnect Wallet
-      </Button>
-    );
-  }
-
+  // Simple component that uses ConnectButton from dapp-kit
+  // This will automatically handle wallet connections with Slush, Phantom, etc.
   return (
     <ConnectButton connectText="Connect Wallet">
       <Button 
