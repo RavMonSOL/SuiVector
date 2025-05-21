@@ -121,8 +121,25 @@ export const SuiProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       // Request test tokens if on devnet
       if (SUI_NETWORK.includes('devnet')) {
         try {
-          // In a real app, you'd use a faucet API
-          console.log("You would request test tokens here in a real implementation");
+          // Actually request tokens from Sui devnet faucet
+          const faucetResponse = await fetch('https://faucet.devnet.sui.io/gas', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              FixedAmountRequest: {
+                recipient: newAddress,
+              }
+            })
+          });
+          
+          if (faucetResponse.ok) {
+            console.log("Successfully requested test tokens from faucet");
+          } else {
+            const errorData = await faucetResponse.json();
+            console.error("Faucet request failed:", errorData);
+          }
         } catch (e) {
           console.error("Failed to request test tokens:", e);
         }
