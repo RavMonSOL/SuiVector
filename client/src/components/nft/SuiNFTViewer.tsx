@@ -146,9 +146,11 @@ export const SuiNFTViewer: React.FC = () => {
         ],
       });
       
-      // Execute the transaction
+      // Execute the transaction using the connected wallet
+      const { keypair } = useSui() as any; // Access keypair from context
       const result = await provider.signAndExecuteTransactionBlock({
         transactionBlock: tx,
+        signer: keypair, // Add the signer
         options: {
           showEffects: true,
         },
