@@ -121,16 +121,14 @@ export const SuiProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       // Request test tokens if on devnet
       if (SUI_NETWORK.includes('devnet')) {
         try {
-          // Actually request tokens from Sui devnet faucet
-          const faucetResponse = await fetch('https://faucet.devnet.sui.io/gas', {
+          // Actually request tokens from Sui devnet faucet using v2 endpoint
+          const faucetResponse = await fetch('https://faucet.devnet.sui.io/v2/gas', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              FixedAmountRequest: {
-                recipient: newAddress,
-              }
+              recipient: newAddress,
             })
           });
           

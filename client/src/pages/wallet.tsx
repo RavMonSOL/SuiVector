@@ -10,6 +10,7 @@ import { useState } from 'react';
 import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, Copy, CheckCircle2, ArrowRightLeft, Send, Wallet } from 'lucide-react';
+import ConnectWalletModal from '@/components/wallet/ConnectWalletModal';
 
 export default function WalletPage() {
   const { connected, address, balance, connectWallet, sendSui, refreshBalance } = useSui();
@@ -17,6 +18,7 @@ export default function WalletPage() {
   const [amount, setAmount] = useState('');
   const [sending, setSending] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [walletModalOpen, setWalletModalOpen] = useState(false);
   const { toast } = useToast();
   
   // Handle sending SUI tokens
@@ -88,7 +90,7 @@ export default function WalletPage() {
                 </p>
               </div>
               <Button 
-                onClick={connectWallet} 
+                onClick={() => setWalletModalOpen(true)} 
                 size="lg" 
                 className="bg-gradient-to-r from-primary to-accent neon-btn"
               >
@@ -204,7 +206,7 @@ export default function WalletPage() {
                     Please connect your wallet to view your balance and send tokens.
                   </p>
                   <Button 
-                    onClick={connectWallet} 
+                    onClick={() => setWalletModalOpen(true)}
                     className="mt-4 bg-gradient-to-r from-primary to-accent neon-btn"
                   >
                     Connect Wallet
@@ -267,6 +269,9 @@ export default function WalletPage() {
           </Tabs>
         </div>
       </div>
+      
+      {/* Wallet Modal */}
+      <ConnectWalletModal isOpen={walletModalOpen} onClose={() => setWalletModalOpen(false)} />
     </div>
   );
 }
