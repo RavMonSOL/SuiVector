@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useSui } from '@/lib/suiContext';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
@@ -8,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { Loader2, ExternalLink } from 'lucide-react';
+import { useSuiClient, useCurrentAccount } from '@mysten/dapp-kit';
 
 interface NFTData {
   id: string;
@@ -18,29 +18,34 @@ interface NFTData {
 }
 
 export const SuiNFTViewer: React.FC = () => {
-  const { provider, connected, address, error: suiError } = useSui();
+  const suiClient = useSuiClient();
+  const currentAccount = useCurrentAccount();
+  const address = currentAccount?.address;
+  const connected = !!currentAccount;
+  
   const [nfts, setNfts] = useState<NFTData[]>([]);
   const [loading, setLoading] = useState(false);
   const [mintingNFT, setMintingNFT] = useState(false);
+  const [suiError, setSuiError] = useState<string | null>(null);
   const { toast } = useToast();
   
   // Load NFTs when address changes
   useEffect(() => {
-    if (connected && provider && address) {
+    if (connected && suiClient && address) {
       fetchUserNFTs();
     } else {
       setNfts([]);
     }
-  }, [connected, provider, address]);
+  }, [connected, suiClient, address]);
   
   // Fetch NFTs for the connected wallet
   const fetchUserNFTs = async () => {
-    if (!provider || !address) return;
+    if (!suiClient || !address) return;
     
     setLoading(true);
     try {
       // Get all objects owned by the address
-      const objectsResponse = await provider.getOwnedObjects({
+      const objectsResponse = await suiClient.getOwnedObjects({
         owner: address,
         options: {
           showContent: true,
@@ -123,7 +128,7 @@ export const SuiNFTViewer: React.FC = () => {
   
   // Mint a new NFT
   const mintNFT = async () => {
-    if (!provider || !address) {
+    if (!suiClient || !address) {
       toast({
         title: "Wallet not connected",
         description: "Please connect your wallet to mint an NFT.",
@@ -163,7 +168,8 @@ export const SuiNFTViewer: React.FC = () => {
         digest: 'simulated-transaction-digest'
       };
       
-      if (result.effects?.status?.status === 'success') {
+      // Check simulation result
+      if (result.effects && result.effects.status === 'success') {
         toast({
           title: "NFT minted successfully!",
           description: "Your new NFT has been created on the Sui network.",
@@ -174,7 +180,7 @@ export const SuiNFTViewer: React.FC = () => {
       } else {
         toast({
           title: "Minting failed",
-          description: `Transaction failed: ${result.effects?.status?.error || 'Unknown error'}`,
+          description: "Transaction failed: Unknown error",
           variant: "destructive",
         });
       }
